@@ -1,12 +1,42 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts" setup>
+import { ref } from "vue";
+const form = ref({
+  value: [
+    {
+      name: "",
+      value: ""
+    },
+    {
+      name: "",
+      value: ""
+    }
+  ],
+});
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+  <el-form :model="form">
+    <el-table :data="form.value">
+      <el-table-column label="名称">
+        <template v-slot="{ $index }">
+          <el-form-item :prop="`value[${$index}].name`" required>
+            <el-input v-model="form.value[$index].name"></el-input>
+          </el-form-item>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="数值">
+        <template v-slot="{ $index }">
+          <el-form-item :prop="`value[${$index}].value`" required>
+            <el-input v-model="form.value[$index].value"></el-input>
+          </el-form-item>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-form>
+  <div>
+    {{ form }}
+  </div>
 </template>
 
 <style>
