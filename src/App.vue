@@ -1,20 +1,52 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+
+/**
+ *  装饰器测试
+ */
+const testDecorator = (target: any, key: String, descriptor: any) => {
+  const old = descriptor.value;
+  descriptor.value = function(...args) {
+     return old.apply(this, args) + "_decorator_tail";
+  }
+};
+
+class A {
+  prefix: String;
+  constructor() {
+    this.prefix = "AClass_prefix_";
+  }
+  @testDecorator
+  test1(name: String): String {
+    return this.prefix +  "[hello:" + name + "]";
+  }
+
+   test2(): String {
+    return this.test1("测试");
+  }
+}
+
+function test() {
+  const result = new A().test2();
+  console.log("result is ===> " + result);
+}
+
 const form = ref({
   value: [
     {
       name: "",
-      value: ""
+      value: "",
     },
     {
       name: "",
-      value: ""
-    }
+      value: "",
+    },
   ],
 });
 </script>
 
 <template>
+  <el-button @click="test">测试</el-button>
   <el-form :model="form">
     <el-table :data="form.value">
       <el-table-column label="名称">
